@@ -25,11 +25,11 @@ export const appConfig = {
   // Sports tabs in header ticker
   sports: [
     { id: 'all', label: 'All', emoji: null },
-    { id: 'cricket', label: 'Cricket', emoji: '🏏', path: '/cricket' },
-    { id: 'football', label: 'Football', emoji: '⚽', path: '/football' },
-    { id: 'badminton', label: 'Badminton', emoji: '🏸', path: '/badminton' },
-    { id: 'tennis', label: 'Tennis', emoji: '🎾', path: '/tennis' },
-    { id: 'formula1', label: 'Formula 1', emoji: '🏎️', path: '/formula1' },
+    { id: 'cricket', label: 'Cricket', path: '/cricket' },
+    { id: 'football', label: 'Football', path: '/football' },
+    { id: 'badminton', label: 'Badminton',path: '/badminton' },
+    { id: 'tennis', label: 'Tennis',  path: '/tennis' },
+    { id: 'formula1', label: 'Formula 1',  path: '/formula1' },
   ],
 
 cricketTabs: [

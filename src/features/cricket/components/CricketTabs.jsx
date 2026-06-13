@@ -16,7 +16,7 @@ const CricketTabs = memo(({ liveSeries = [] }) => {
               <NavLink
                 key={tab.id}
                 to={tab.path}
-                className={`flex-shrink-0 px-4 py-3 text-sm font-medium border-b-2 transition-colors duration-150 whitespace-nowrap ${
+                className={`flex-shrink-0 px-4 py-3 text-sm  relative z-30 pointer-events-auto flex items-center gap-2 font-medium border-b-2 transition-colors duration-150 whitespace-nowrap ${
                   isActive
                     ? 'border-[#00698c] text-[#00698c]'
                     : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'

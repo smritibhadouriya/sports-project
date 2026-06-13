@@ -99,28 +99,63 @@ const LiveCard = memo(({ match, onClick }) => (
 
 // ── Upcoming Match Row ────────────────────────────────────────────────────────
 const UpcomingRow = memo(({ match, onClick }) => {
-  const dateStr = match.date || match.startTime
-    ? new Date(match.date || match.startTime).toLocaleString('en-IN', {
-        day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit',
-      })
+  const rawDate = match.date || match.startTime
+  const dateObj = rawDate ? new Date(rawDate) : null
+  const dayStr = dateObj
+    ? dateObj.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })
     : ''
+  const timeStr = dateObj
+    ? dateObj.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })
+    : ''
+
+  const team1 = match.team1?.name || match.team1?.shortName || match.teamInfo?.[0]?.shortname || 'TBA'
+  const team2 = match.team2?.name || match.team2?.shortName || match.teamInfo?.[1]?.shortname || 'TBA'
+  const team1Logo = match.team1?.logo || getTeamFlag(match.team1?.name)
+  const team2Logo = match.team2?.logo || getTeamFlag(match.team2?.name)
+  const subtitle = match.seriesName || match.matchDesc || ''
 
   return (
     <div
       onClick={onClick}
-      className="bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 flex items-center justify-between hover:shadow-md transition-shadow cursor-pointer group"
+      className="bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 flex items-center gap-3 hover:shadow-md hover:border-[#00698c]/30 transition-all cursor-pointer group"
     >
-      <div className="flex-1 min-w-0 pr-3 gap-4">
-        <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-[#00698c] transition-colors truncate">
-          {match.team1?.name || match.teamInfo?.[0]?.shortname || 'TBA'}
-        <span className="text-gray-400 dark:text-gray-500 font-normal mx-2">vs</span>
-          {match.team2?.name || match.teamInfo?.[1]?.shortname || 'TBA'}
-        </p>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">
-          {match.seriesName || match.matchDesc || ''}{dateStr ? ` · ${dateStr}` : ''}
-        </p>
+      {/* Date / time chip */}
+      {dateObj && (
+        <div className="flex-shrink-0 flex flex-col items-center justify-center w-14 py-1.5 rounded-lg bg-[#00698c]/5 dark:bg-[#00698c]/10 border border-[#00698c]/10">
+          <span className="text-[11px] font-bold text-[#00698c] leading-tight">{dayStr}</span>
+          <span className="text-[10px] font-medium text-gray-500 dark:text-gray-400">{timeStr}</span>
+        </div>
+      )}
+
+      {/* Teams */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 min-w-0">
+          <img
+            src={team1Logo}
+            alt={team1}
+            className="w-5 h-5 rounded-full object-cover flex-shrink-0"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
+          <span className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-[#00698c] transition-colors truncate">
+            {team1}
+          </span>
+          <span className="text-[10px] font-bold text-gray-400 flex-shrink-0">vs</span>
+          <img
+            src={team2Logo}
+            alt={team2}
+            className="w-5 h-5 rounded-full object-cover flex-shrink-0"
+            onError={(e) => { e.currentTarget.style.display = 'none' }}
+          />
+          <span className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-[#00698c] transition-colors truncate">
+            {team2}
+          </span>
+        </div>
+        {subtitle && (
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 truncate">{subtitle}</p>
+        )}
       </div>
-     
+
+      <ChevronRight />
     </div>
   )
 })
@@ -329,32 +364,7 @@ const CricketHomePage = () => {
             </div>
           )}
         </div>
-
-        {/* ── UPCOMING FIXTURES ──────────────────────────────────────────── */}
-        <div className="mb-8">
-          <SectionTitle title="📅 Upcoming Fixtures" to="/cricket/fixtures" onNavigate={navigate} />
-          {loading ? (
-            <div className="space-y-2">
-              {[...Array(4)].map((_, i) => <SkeletonCard key={i} height="h-16" />)}
-            </div>
-          ) : upcomingMatches.length === 0 ? (
-            <div className="bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg py-6 text-center">
-              <p className="text-sm text-gray-400">No upcoming fixtures</p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {upcomingMatches.map((m) => (
-                <UpcomingRow
-                  key={m.id || m.matchId}
-                  match={m}
-             
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* ── RECENT RESULTS ─────────────────────────────────────────────── */}
+             {/* ── RECENT RESULTS ─────────────────────────────────────────────── */}
         <div className="mb-8">
           <SectionTitle title="🏆 Recent Results" to="/cricket/results" onNavigate={navigate} />
           {loading ? (
@@ -378,6 +388,31 @@ const CricketHomePage = () => {
           )}
         </div>
 
+
+ {/* ── UPCOMING FIXTURES ──────────────────────────────────────────── */}
+<div className="mb-8">
+  <SectionTitle title="📅 Upcoming Fixtures" to="/cricket/fixtures" onNavigate={navigate} />
+  {loading ? (
+    <div className="space-y-2">
+      {[...Array(4)].map((_, i) => <SkeletonCard key={i} height="h-20" />)}
+    </div>
+  ) : upcomingMatches.length === 0 ? (
+    <div className="bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg py-6 text-center">
+      <p className="text-sm text-gray-400">No upcoming fixtures</p>
+    </div>
+  ) : (
+    <div className="space-y-2">
+      {upcomingMatches.map((m) => (
+        <ResultRow
+          key={m.id || m.matchId}
+          match={m}
+          onClick={() => m.matchId && navigate(`/cricket/series/${m.seriesId}/scorecard/${m.matchId}/`)}
+        />
+      ))}
+    </div>
+  )}
+</div>
+   
         {/* ── FEATURED SERIES ────────────────────────────────────────────── */}
         <div className="mb-8">
           <SectionTitle title="📋 Featured Series" to="/cricket/series" onNavigate={navigate} />

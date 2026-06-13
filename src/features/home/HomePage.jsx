@@ -534,7 +534,7 @@ useEffect(() => {
         title={seoConfig.pages.home.title}
         description={seoConfig.pages.home.description}
       />
-      <HeroSection />
+ <HeroSection hideTickerOnTop />
 
           <div className="relative z-20">
         <Category />

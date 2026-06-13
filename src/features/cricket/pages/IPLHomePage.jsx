@@ -151,59 +151,80 @@ const LiveMatchCard = ({ match, onClick }) => {
   )
 }
 
-// ── Primary News Card ─────────────────────────────────────────────────────────
-const PrimaryNewsCard = ({ article, index }) => {
-  const slug = createSlug(article.title, index)
-  const source = typeof article.source === 'string' ? article.source : article.source?.name
-  const author = typeof article.author === 'string' ? article.author : article.author?.name
+// ── Scheduled / Result Match Card (recent + upcoming) ──────────────────────────
+const StaticMatchCard = ({ match, onClick, upcoming = false }) => {
+  const t1 = match.team1 || {}
+  const t2 = match.team2 || {}
+  const t1Name = t1.shortName || t1.name || t1.teamName || 'TBA'
+  const t2Name = t2.shortName || t2.name || t2.teamName || 'TBA'
+
+  const TeamLogo = ({ team, name }) => (
+    team.logo || team.imageId ? (
+      <img
+        src={team.logo || `https://cricbuzz-cricket.p.rapidapi.com/img/v1/i1/c${team.imageId}/i.jpg`}
+        alt={name}
+        className="w-9 h-9 rounded-full object-cover bg-gray-100 dark:bg-gray-800 ring-2 ring-white dark:ring-gray-800"
+        onError={e => e.currentTarget.style.display = 'none'}
+      />
+    ) : (
+      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#00698c]/20 to-[#00698c]/5 flex items-center justify-center ring-2 ring-white dark:ring-gray-800">
+        <span className="text-xs font-black text-[#00698c]">{name.slice(0, 2)}</span>
+      </div>
+    )
+  )
 
   return (
-    <Link
-      to={`/news/${slug}`}
-      state={{ article }}
-      className="group block bg-white dark:bg-[#161b22] rounded-2xl border border-gray-100 dark:border-gray-800/60 overflow-hidden hover:shadow-xl hover:shadow-[#00698c]/5 hover:border-[#00698c]/20 transition-all duration-300"
+    <div
+      onClick={onClick}
+      className="cursor-pointer group relative overflow-hidden rounded-2xl border border-gray-100 dark:border-gray-800/60 bg-white dark:bg-[#1c2128] shadow-sm hover:shadow-lg hover:border-[#00698c]/20 transition-all duration-300"
     >
-      {article.image && (
-        <div className="relative h-48 overflow-hidden">
-          <img
-            src={article.image}
-            alt={article.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-            loading="lazy"
-            onError={e => { e.currentTarget.parentElement.style.display = 'none' }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-          {source && (
-            <span className="absolute bottom-3 left-3 text-[10px] font-bold text-white/90 bg-black/40 px-2.5 py-1 rounded-full backdrop-blur-md">
-              {source}
-            </span>
-          )}
-          {article.publishedAt && (
-            <time className="absolute top-3 right-3 text-[10px] text-white/80 bg-black/30 px-2 py-0.5 rounded-full backdrop-blur-sm">
-              {formatTime(article.publishedAt)}
-            </time>
-          )}
-        </div>
-      )}
-      <div className="p-4">
-        <h3 className="text-[15px] font-bold text-gray-900 dark:text-white leading-snug line-clamp-2 group-hover:text-[#00698c] transition-colors duration-200">
-          {article.title}
-        </h3>
-        {article.description && (
-          <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 mt-1.5 leading-relaxed">
-            {article.description}
-          </p>
-        )}
-        {author && (
-          <p className="text-[10px] text-gray-400 mt-2">By {author}</p>
-        )}
+      {/* Top bar */}
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 dark:border-gray-800/60">
+        <span className="text-[10px] font-black uppercase tracking-widest text-[#00698c]">
+          {upcoming ? 'Upcoming' : 'Result'}
+        </span>
+        <span className="text-[10px] text-gray-400 font-medium truncate ml-2">{match.matchDesc || ''}</span>
       </div>
-    </Link>
+
+      {/* Teams */}
+      <div className="px-4 py-3 flex items-center justify-between gap-3">
+        <div className="flex-1 flex items-center gap-2.5">
+          <TeamLogo team={t1} name={t1Name} />
+          <div>
+            <p className="text-sm font-bold text-gray-900 dark:text-white leading-none">{t1Name}</p>
+            {t1.score && <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mt-0.5">{t1.score}</p>}
+          </div>
+        </div>
+
+        <div className="text-[10px] font-black text-gray-300 dark:text-gray-600 px-2">VS</div>
+
+        <div className="flex-1 flex items-center gap-2.5 flex-row-reverse">
+          <TeamLogo team={t2} name={t2Name} />
+          <div className="text-right">
+            <p className="text-sm font-bold text-gray-900 dark:text-white leading-none">{t2Name}</p>
+            {t2.score && <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mt-0.5">{t2.score}</p>}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer: result for recent, time for upcoming */}
+      <div className="px-4 pb-3">
+        {upcoming ? (
+          <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg px-2.5 py-1.5 line-clamp-1">
+            🗓 {formatTime(match.startDate) || 'TBA'}
+          </p>
+        ) : (match.result || match.status) ? (
+          <p className="text-[10px] font-semibold text-[#00698c] bg-[#00698c]/8 dark:bg-[#00698c]/10 rounded-lg px-2.5 py-1.5 line-clamp-1">
+            {match.result || match.status}
+          </p>
+        ) : null}
+      </div>
+    </div>
   )
 }
 
-// ── Compact News Card ──────────────────────────────────────────────────────────
-const CompactNewsCard = ({ article, index, style }) => {
+// ── Grid News Card ──────────────────────────────────────────────────────────────
+const GridNewsCard = ({ article, index, style }) => {
   const slug = createSlug(article.title, index)
   const source = typeof article.source === 'string' ? article.source : article.source?.name
 
@@ -212,10 +233,10 @@ const CompactNewsCard = ({ article, index, style }) => {
       to={`/news/${slug}`}
       state={{ article }}
       style={style}
-      className="group flex gap-3 p-3 rounded-2xl bg-white dark:bg-[#161b22] border border-gray-100 dark:border-gray-800/60 hover:border-[#00698c]/20 hover:shadow-md hover:shadow-[#00698c]/5 transition-all duration-200 animate-slide-up"
+      className="group flex flex-col bg-white dark:bg-[#161b22] rounded-2xl border border-gray-100 dark:border-gray-800/60 overflow-hidden hover:shadow-xl hover:shadow-[#00698c]/5 hover:border-[#00698c]/20 transition-all duration-300 animate-slide-up"
     >
       {/* Thumbnail */}
-      <div className="w-[68px] h-[56px] rounded-xl overflow-hidden flex-shrink-0 bg-gray-50 dark:bg-gray-800/50">
+      <div className="relative aspect-[16/10] overflow-hidden bg-gray-50 dark:bg-gray-800/50">
         {article.image ? (
           <img
             src={article.image}
@@ -226,26 +247,24 @@ const CompactNewsCard = ({ article, index, style }) => {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <span className="text-xl opacity-15">🏏</span>
+            <span className="text-3xl opacity-15">🏏</span>
           </div>
+        )}
+        {article.publishedAt && (
+          <time className="absolute top-2 right-2 text-[9px] text-white/90 bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">
+            {formatTime(article.publishedAt)}
+          </time>
         )}
       </div>
 
       {/* Text */}
-      <div className="flex-1 min-w-0 flex flex-col justify-between py-0.5">
-        <h4 className="text-[12.5px] font-semibold text-gray-900 dark:text-white leading-snug line-clamp-2 group-hover:text-[#00698c] transition-colors duration-200">
+      <div className="flex-1 flex flex-col p-3">
+        <h4 className="text-[13px] font-semibold text-gray-900 dark:text-white leading-snug line-clamp-3 group-hover:text-[#00698c] transition-colors duration-200">
           {article.title}
         </h4>
-        <div className="flex items-center justify-between mt-1">
-          {source && (
-            <span className="text-[10px] font-bold text-[#00698c]/80 truncate">{source}</span>
-          )}
-          {article.publishedAt && (
-            <time className="text-[10px] text-gray-400 flex-shrink-0 ml-2">
-              {formatTime(article.publishedAt)}
-            </time>
-          )}
-        </div>
+        {source && (
+          <span className="mt-2 text-[10px] font-bold text-[#00698c]/80 truncate">{source}</span>
+        )}
       </div>
     </Link>
   )
@@ -256,7 +275,6 @@ const NewsSection = ({ news, loading, error }) => {
   const [showAll, setShowAll] = useState(false)
   const INITIAL = 6
   const visible = showAll ? news : news.slice(0, INITIAL)
-  const [primary, ...rest] = visible
 
   if (loading) return (
     <section>
@@ -288,14 +306,12 @@ const NewsSection = ({ news, loading, error }) => {
     <section>
       <SectionHead label="Latest News" count={news.length} />
 
-      <div className="space-y-2.5">
-        {primary && <PrimaryNewsCard article={primary} index={0} />}
-
-        {rest.map((article, i) => (
-          <CompactNewsCard
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+        {visible.map((article, i) => (
+          <GridNewsCard
             key={article.url || i}
             article={article}
-            index={i + 1}
+            index={i}
             style={{ animationDelay: `${i * 35}ms` }}
           />
         ))}
@@ -344,6 +360,47 @@ const LiveSection = ({ matches, loading, navigate }) => {
   )
 }
 
+// ── Recent Section ───────────────────────────────────────────────────────────────
+const RecentSection = ({ matches, navigate }) => {
+  if (!matches.length) return null
+
+  return (
+    <section>
+      <SectionHead label="Recent Results" count={matches.length} />
+      <div className="space-y-3">
+        {matches.map(m => (
+          <StaticMatchCard
+            key={m.matchId}
+            match={m}
+            onClick={() => navigate(`/cricket/series/${m.seriesId}/scorecard/${m.matchId}/`)}
+          />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+// ── Upcoming / Fixtures Section ────────────────────────────────────────────────────
+const UpcomingSection = ({ matches, navigate }) => {
+  if (!matches.length) return null
+
+  return (
+    <section>
+      <SectionHead label="Fixtures" count={matches.length} />
+      <div className="space-y-3">
+        {matches.map(m => (
+          <StaticMatchCard
+            key={m.matchId}
+            match={m}
+            upcoming
+            onClick={() => navigate(`/cricket/series/${m.seriesId}/scorecard/${m.matchId}/`)}
+          />
+        ))}
+      </div>
+    </section>
+  )
+}
+
 // IPL ke series IDs — inhe apni ipl.api.js se match karo
 const IPL_SERIES_IDS = ['9237', '7607', '8048', '3718', '2919'] // common IPL series IDs
 
@@ -360,8 +417,10 @@ const isIPLMatch = (match) => {
 const IPLHomePage = () => {
   const navigate = useNavigate()
 
-  const [liveMatches,  setLiveMatches]  = useState([])
-  const [matchLoading, setMatchLoading] = useState(true)
+  const [liveMatches,     setLiveMatches]     = useState([])
+  const [recentMatches,   setRecentMatches]   = useState([])
+  const [upcomingMatches, setUpcomingMatches] = useState([])
+  const [matchLoading,    setMatchLoading]    = useState(true)
 
   const [news,        setNews]        = useState([])
   const [newsLoading, setNewsLoading] = useState(true)
@@ -374,10 +433,10 @@ const IPLHomePage = () => {
       try {
         const feeds = await getAllMatchFeeds()
         if (!cancelled) {
-          const allLive = feeds.live || []
-          // Sirf IPL series ke live matches dikhao
-          const iplLive = allLive.filter(isIPLMatch)
-          setLiveMatches(iplLive)
+          // Sirf IPL series ke matches dikhao
+          setLiveMatches((feeds.live || []).filter(isIPLMatch))
+          setRecentMatches((feeds.recent || []).filter(isIPLMatch))
+          setUpcomingMatches((feeds.upcoming || []).filter(isIPLMatch))
         }
       } catch { /* silent */ }
       finally { if (!cancelled) setMatchLoading(false) }
@@ -411,6 +470,14 @@ const IPLHomePage = () => {
         <LiveSection
           matches={liveMatches}
           loading={matchLoading}
+          navigate={navigate}
+        />
+        <RecentSection
+          matches={recentMatches}
+          navigate={navigate}
+        />
+        <UpcomingSection
+          matches={upcomingMatches}
           navigate={navigate}
         />
         <NewsSection

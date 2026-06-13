@@ -358,17 +358,7 @@ const LiveTicker = memo(() => {
   return (
     <div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="pt-4 pb-2 flex items-center justify-between">
-          <h2 className="text-2xl sm:text-3xl md:text-2xl font-black text-white tracking-wide">
-            Live Updates
-          </h2>
-          <button
-            onClick={() => navigate('/cricket/ipl/matches')}
-            className="text-xs font-bold text-[#3ab4d4] hover:underline tracking-wide"
-          >
-            Full Schedule →
-          </button>
-        </div>
+    
 
         <div className="flex items-center gap-4 py-3">
           <div className="flex-1 overflow-x-auto scrollbar-hide">

@@ -29,7 +29,25 @@ const SportsTabs = memo(({ hideTickerOnTop = false }) => {
   }
 
   return (
-    <div className="bg-[#011E28] dark:bg-[#011E28]">
+    <div className="bg-[#011E28] dark:bg-[#011E28] px-8 ">
+
+
+       <div className="absolute inset-0  z-10 " />
+
+   {/* Header Row: Heading + Toggle Button - defines base height */}
+      <div className="relative z-20  max-w-7xl mx-auto flex items-center justify-between px-13 py-3">
+        <h1 className="text-white font-semibold text-lg">
+          Live Sports Updates
+        </h1>
+
+        <button
+          onClick={handleToggleTicker}
+          title={tickerVisible ? 'Hide Live Ticker' : 'Show Live Ticker'}
+          className="flex items-center gap-1 px-2 py-0.5 rounded text-xs text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200"
+        >
+          <span>{tickerVisible ? '▲ Hide' : '▼ Live'}</span>
+        </button>
+      </div>
 
       {/* Ticker + Hide Button Row */}
       <div className="relative">
@@ -41,17 +59,10 @@ const SportsTabs = memo(({ hideTickerOnTop = false }) => {
           <LiveTicker />
         </div>
       </div>
-  
+ 
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
-         {/* Toggle Button */}
-        <button
-          onClick={handleToggleTicker}
-          title={tickerVisible ? 'Hide Live Ticker' : 'Show Live Ticker'}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex items-center gap-1 px-2 py-0.5 rounded text-xs text-white/60 hover:text-white hover:bg-white/10 transition-all duration-200"
-        >
-          <span>{tickerVisible ? '▲ Hide' : '▼ Live'}</span>
-        </button>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative bg-[#011E28] dark:bg-[#011E28]">
+       
         
         <SportTabsList
           sports={appConfig.sports}
@@ -62,7 +73,9 @@ const SportsTabs = memo(({ hideTickerOnTop = false }) => {
         />
         
       </div>
+   
     </div>
+
   )
 })
 

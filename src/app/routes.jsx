@@ -7,6 +7,7 @@ import ScrollToTop from '@/components/ScrollToTop'
 import CricketLayout from '@/features/cricket/components/Cricketlayout'
 import CricketTeamsPage from '../features/cricket/pages/CricketTeamPage'
 import CricketTeamDetailPage from '../features/cricket/pages/CricketTeamDetailPage'
+import ComingSoon from '../design-system/Comingsoon'
 
 // Common Pages
 const HomePage       = lazy(() => import('@/features/home/HomePage'))
@@ -41,6 +42,7 @@ const IPLMatchesPage      = lazy(() => import('@/features/cricket/pages/IPLMatch
 const IPLScorecardPage    = lazy(() => import('@/features/cricket/pages/Iplscorecardpage'))
 const IPLPointsTablePage  = lazy(() => import('@/features/cricket/pages/IPLPointsTablePage'))
 
+const comingSoon          = lazy(() => import('@/design-system/Comingsoon'))
 // Media
 const Allphoto    = lazy(() => import('@/features/news/pages/Allphoto'))
 const GalleryView = lazy(() =>
@@ -143,6 +145,13 @@ export const router = createBrowserRouter([
 
       // ---------------- CONTACT ----------------
       { path: 'contact', element: <ContactPage /> },
+
+      //-------------Comming soon ------------
+      { path: 'football', element: <ComingSoon /> },
+      { path: 'badminton', element: <ComingSoon /> },
+      { path: 'tennis', element: <ComingSoon /> },
+      { path: 'formula1', element: <ComingSoon /> },
+    
 
       // ---------------- FALLBACK ----------------
       { path: '*', element: <NotFoundPage /> },

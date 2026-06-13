@@ -19,7 +19,7 @@ const SportTabsList = ({
 
   return (
     <div
-      className={`flex items-center gap-2 ${
+      className={`relative z-30 pointer-events-auto flex items-center gap-2 ${
         scrollable
           ? 'overflow-x-auto scrollbar-hide py-2'
           : 'flex-wrap'
@@ -33,7 +33,7 @@ const SportTabsList = ({
             key={sport.id || sport.label}
             to={sport.path || '/'}
             className={`
-              flex-shrink-0 flex items-center gap-1.5
+              flex-shrink-0 flex items-center gap-1.5 cursor-pointer
               px-4 py-1.5 rounded-full font-medium whitespace-nowrap transition-all
               ${textSize}
               ${active ? activeClass : inactiveClass}
