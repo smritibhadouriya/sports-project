@@ -1,0 +1,1 @@
+import{M as a,J as e}from"./index-CWTHNZ0q.js";const o=a.memo(({title:s,className:t=""})=>e.jsx("div",{className:`bg-[#00698c] text-white rounded-lg px-4 py-3 mb-4 ${t}`,children:e.jsx("h2",{className:"text-base font-bold",children:s})}));o.displayName="SectionHeader";export{o as S};
