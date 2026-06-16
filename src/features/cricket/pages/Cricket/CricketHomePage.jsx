@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SectionHeader from '@/shared/components/SectionHeader'
-import { getAllMatchFeeds, getTeamFlag, getFixtures, getSeries } from '../../../service/ipl.api'
+import { getAllMatchFeeds, getTeamFlag, getFixtures, getSeries } from '../../../../service/ipl.api'
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 const ChevronRight = () => (
@@ -22,7 +22,7 @@ const SkeletonCard = ({ height = 'h-32' }) => (
 
 // ── Section Title with "View All" ─────────────────────────────────────────────
 const SectionTitle = ({ title, to, onNavigate }) => (
-  <div className="flex items-center justify-between mb-3">
+  <div className="flex items-center justify-between mb-3 z-40 relative">
     <h3 className="text-base font-extrabold text-gray-900 dark:text-white">{title}</h3>
     <button
       onClick={() => onNavigate(to)}
@@ -37,7 +37,7 @@ const SectionTitle = ({ title, to, onNavigate }) => (
 const LiveCard = memo(({ match, onClick }) => (
   <div
     onClick={onClick}
-    className="flex-shrink-0 w-80 bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer snap-start"
+    className="flex-shrink-0 w-80 bg-white  z-40 relative dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer snap-start"
   >
     {/* Header */}
     <div className="bg-gradient-to-r from-[#00698c] to-[#0088b0] px-3 py-2 flex items-center justify-between">
@@ -164,7 +164,7 @@ const UpcomingRow = memo(({ match, onClick }) => {
 const ResultRow = memo(({ match, onClick }) => (
   <div
     onClick={onClick}
-    className="bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 hover:shadow-md transition-shadow cursor-pointer group"
+    className="bg-white dark:bg-[#1c2128] border z-40 relative border-gray-200 dark:border-gray-700 rounded-lg px-4 py-3 hover:shadow-md transition-shadow cursor-pointer group"
   >
     <div className="flex items-center justify-between mb-1.5">
       <div className="flex items-center gap-2 flex-1 min-w-0 pr-2">
@@ -207,7 +207,7 @@ const ResultRow = memo(({ match, onClick }) => (
 const SeriesRowHome = memo(({ series, isOngoing, onClick }) => (
   <div
     onClick={onClick}
-    className={`bg-white dark:bg-[#1c2128] rounded-lg px-4 py-3 flex items-center justify-between hover:shadow-md transition-all cursor-pointer group border ${
+    className={`bg-white dark:bg-[#1c2128] z-40 relative rounded-lg px-4 py-3 flex items-center justify-between hover:shadow-md transition-all cursor-pointer group border ${
       isOngoing ? 'border-[#00698c]/50' : 'border-gray-200 dark:border-gray-700 hover:border-[#00698c]/30'
     }`}
   >

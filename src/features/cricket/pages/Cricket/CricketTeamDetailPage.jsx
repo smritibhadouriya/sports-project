@@ -1,7 +1,7 @@
 // CricketTeamDetailPage.jsx
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getAllTeams, getTeamPlayersById } from '../../../service/ipl.api'
+import { getAllTeams, getTeamPlayersById } from '../../../../service/ipl.api'
 
 const getSlug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
@@ -62,7 +62,7 @@ const PlayerCard = ({ player, onClick, index }) => (
   <button
     onClick={() => onClick(player)}
     style={{ animationDelay: `${index * 40}ms` }}
-    className="flex flex-row items-center gap-4 w-full px-4 py-3 bg-white dark:bg-[#1c2128] border border-gray-100 dark:border-gray-700/60 rounded-2xl shadow-sm hover:shadow-md hover:border-[#00698c]/40 hover:-translate-y-0.5 transition-all duration-200 text-left group animate-fade-in"
+    className="flex flex-row items-center gap-4 w-full px-4 relative z-10  py-3 bg-white dark:bg-[#1c2128] border border-gray-100 dark:border-gray-700/60 rounded-2xl shadow-sm hover:shadow-md hover:border-[#00698c]/40 hover:-translate-y-0.5 transition-all duration-200 text-left group animate-fade-in"
   >
     {/* Avatar — left side */}
     <div className="relative flex-shrink-0">
@@ -162,7 +162,7 @@ const CricketTeamDetailPage = () => {
       <div className="flex items-center gap-3 mb-6">
         <button
           onClick={handleBack}
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors flex-shrink-0"
+          className="w-8 h-8 flex items-center justify-center  z-40 relative rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors flex-shrink-0"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M12 5l-7 7 7 7" />

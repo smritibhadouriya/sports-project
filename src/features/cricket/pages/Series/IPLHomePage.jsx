@@ -1,11 +1,9 @@
 // pages/IPLHomePage.jsx
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import {
-  IPLBanner, IPLSubTabs, SkeletonList, EmptyState, ErrorState, MatchCard,
-} from '../components/iplshared'
-import { getAllMatchFeeds } from '../../../service/ipl.api'
-import { getIPLNews } from '../../../service/sports.service.js'
+import { getAllMatchFeeds } from '../../../../service/ipl.api.js'
+import { getIPLNews } from '../../../../service/sports.service.js'
+import { useOutletContext } from 'react-router-dom'
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 const createSlug = (title, index) =>
@@ -346,7 +344,7 @@ const LiveSection = ({ matches, loading, navigate }) => {
 
   return (
     <section>
-      <SectionHead label="Live Now" accent count={matches.length} />
+      
       <div className="space-y-3">
         {matches.map(m => (
           <LiveMatchCard
@@ -407,10 +405,7 @@ const IPL_SERIES_IDS = ['9237', '7607', '8048', '3718', '2919'] // common IPL se
 const isIPLMatch = (match) => {
   if (!match) return false
   const name = (match.seriesName || match.series || '').toLowerCase()
-  const id   = String(match.seriesId || '')
-  return name.includes('indian premier league') ||
-         name.includes('ipl') ||
-         IPL_SERIES_IDS.includes(id)
+  return name.includes('indian premier league') || name.includes(' ipl ')  || name.startsWith('ipl ')|| name.endsWith(' ipl')|| name === 'ipl'
 }
 
 // ── Main Page ──────────────────────────────────────────────────────────────────
@@ -425,25 +420,27 @@ const IPLHomePage = () => {
   const [news,        setNews]        = useState([])
   const [newsLoading, setNewsLoading] = useState(true)
   const [newsError,   setNewsError]   = useState(null)
+  const { seriesId } = useOutletContext() || {}
 
   // ── Matches ────────────────────────────────────────────────────────────────
-  useEffect(() => {
-    let cancelled = false
-    ;(async () => {
-      try {
-        const feeds = await getAllMatchFeeds()
-        if (!cancelled) {
-          // Sirf IPL series ke matches dikhao
-          setLiveMatches((feeds.live || []).filter(isIPLMatch))
-          setRecentMatches((feeds.recent || []).filter(isIPLMatch))
-          setUpcomingMatches((feeds.upcoming || []).filter(isIPLMatch))
-        }
-      } catch { /* silent */ }
-      finally { if (!cancelled) setMatchLoading(false) }
-    })()
-    return () => { cancelled = true }
-  }, [])
+useEffect(() => {
+  let cancelled = false
+  ;(async () => {
+    try {
+      const feeds = await getAllMatchFeeds()
+      if (!cancelled) {
+        const filterBySeries = (arr) =>
+          (arr || []).filter(m => String(m.seriesId) === String(seriesId))
 
+        setLiveMatches(filterBySeries(feeds.live))
+        setRecentMatches(filterBySeries(feeds.recent))
+        setUpcomingMatches(filterBySeries(feeds.upcoming))
+      }
+    } catch { /* silent */ }
+    finally { if (!cancelled) setMatchLoading(false) }
+  })()
+  return () => { cancelled = true }
+}, [seriesId])  // ← seriesId dependency add karo
   // ── News ───────────────────────────────────────────────────────────────────
   useEffect(() => {
     let cancelled = false

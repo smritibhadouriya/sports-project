@@ -357,7 +357,7 @@ const LiveTicker = memo(() => {
 
   return (
     <div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-50">
     
 
         <div className="flex items-center gap-4 py-3">

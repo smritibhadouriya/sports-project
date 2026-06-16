@@ -4,7 +4,6 @@ import { seoConfig } from '@/config/seo.config'
 import { appConfig } from '@/config/app.config'
 import BlogCard from '@/shared/components/BlogCard'
 import { getBlogs } from '../../service/blogs.service.js'
-import Button from '@/design-system/Button'
 import { useLocation } from 'react-router-dom'
 
 import { VITE_BACKEND_URL } from '../../../config.js'
@@ -181,7 +180,7 @@ const BlogsPage = () => {
 
         {visible.length < filtered.length && (
           <div className="text-center">
-            <Button variant="outline" size="lg" onClick={() => setVisibleCount((c) => c + 8)}>
+            <Button className="bg-transparent border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 font-medium transition-colors duration-200 px-6 py-2.5 text-base rounded-lg"  onClick={() => setVisibleCount((c) => c + 8)}>
               Load More
             </Button>
           </div>

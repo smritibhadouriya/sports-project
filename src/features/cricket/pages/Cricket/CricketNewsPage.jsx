@@ -5,7 +5,7 @@
 import { memo, useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
-import { getLatestNews } from '../../../service/sports.service.js'
+import { getLatestNews } from '../../../../service/sports.service.js'
 
 // ── Sub-category tabs ─────────────────────────────────────────────────────────
 const SUB_TABS = [
@@ -51,7 +51,7 @@ const NewsCard = memo(({ item, index }) => (
     to={`/news/${item.slug}`}
     state={{ article: item }}
     style={{ animationDelay: `${(index % PAGE_SIZE) * 50}ms` }}
-    className="bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group block animate-fade-in"
+    className="bg-white dark:bg-[#1c2128] border relative z-10  border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all group block animate-fade-in  "
   >
     {/* Image */}
     <div className="relative h-44 overflow-hidden bg-gray-100 dark:bg-gray-800">

@@ -2,13 +2,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import SportsTabs from '@/layouts/SportsTabs'
-import CricketTabs from '../components/CricketTabs'
+import CricketTabs from '../../components/CricketTabs'
 import BlogsSection from '@/shared/components/BlogsSection'
 import SeoManager from '@/core/seo/SeoManager'
 import {
   IPLBanner, IPLSubTabs, SkeletonList, EmptyState,
-} from '../components/iplshared'
-import { getScorecard, getMatchInfo, getAllMatches } from '../../../service/ipl.api'
+} from '../../components/iplshared'
+import { getScorecard, getMatchInfo, getAllMatches } from '../../../../service/ipl.api'
 
 // ─── Fall of Wickets ──────────────────────────────────────────────────────────
 const FallOfWickets = ({ wickets }) => {
@@ -35,8 +35,8 @@ const BattingTable = ({ innings, onPlayerClick }) => {
   return (
     <div className="mb-6">
       {/* Innings score header */}
-      <div className="flex items-center justify-between bg-[#00698c]/10 dark:bg-[#00698c]/20 px-3 sm:px-4 py-2 border border-gray-200 dark:border-gray-700 mb-0.5">
-        <span className="text-xs font-bold text-gray-600 dark:text-gray-400">
+      <div className="flex   items-center justify-between bg-[#00698c]/10 z-40 relative dark:bg-[#00698c]/20 px-3 sm:px-4 py-2 border border-gray-200 dark:border-gray-700 mb-0.5">
+        <span className="text-xs  font-bold text-gray-600 dark:text-gray-400 z-40 relative">
           {innings.teamName}
         </span>
         <span className="text-sm font-black text-gray-900 dark:text-white">
@@ -69,7 +69,7 @@ const BattingTable = ({ innings, onPlayerClick }) => {
             <div className="min-w-0 pr-2">
              <button
   onClick={() => onPlayerClick?.(p)}
-  className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white hover:text-[#00698c] transition-colors text-left"
+  className="text-xs sm:text-sm font-semibold text-gray-900 z-40 relative dark:text-white hover:text-[#00698c] transition-colors text-left"
 >
   {p.name}
 </button>
@@ -362,7 +362,7 @@ const loadMatch = useCallback(async (id) => {
                 </div>
               )}
 
-              <div className="p-3 sm:p-4">
+              <div className="p-3 sm:p-4 z-40 relative">
                 {/* Match selector */}
                 <MatchSelector
                   matches={allMatches}

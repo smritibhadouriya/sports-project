@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SectionHeader from '@/shared/components/SectionHeader'
-import { getAllMatchFeeds, getTeamFlag, getFixtures } from '../../../service/ipl.api'
+import { getAllMatchFeeds, getTeamFlag, getFixtures } from '../../../../service/ipl.api'
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 const ChevronRight = () => (
@@ -78,7 +78,7 @@ const TabBar = ({ active, onChange, counts }) => {
 const LiveRow = memo(({ match, onClick }) => (
   <div
     onClick={onClick}
-    className="bg-white dark:bg-[#1c2128] border border-red-200/60 dark:border-red-900/30 rounded-lg px-4 py-3 hover:shadow-md transition-all cursor-pointer group"
+    className="bg-white dark:bg-[#1c2128] border z-40 relative border-red-200/60 dark:border-red-900/30 rounded-lg px-4 py-3 hover:shadow-md transition-all cursor-pointer group"
   >
     {/* Top row: series + LIVE badge */}
     <div className="flex items-center justify-between mb-2">

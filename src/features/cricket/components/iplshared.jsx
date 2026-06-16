@@ -1,77 +1,51 @@
 // components/ipl.shared.jsx
 // ─── Shared UI pieces used across all 6 IPL pages ────────────────────────────
-import { useNavigate, useLocation } from 'react-router-dom'
+
 // ─── IPL Banner ───────────────────────────────────────────────────────────────
 export const IPLBanner = ({ title, subtitle }) => (
-  <div className="bg-[#141616] text-white rounded-t-lg px-3 sm:px-4 py-2.5 flex items-center justify-between">
-    
+  <div className="bg-[#00698c] text-white rounded-t-lg px-3 sm:px-4 py-2.5 flex items-center justify-between">
     <h2 className="text-sm sm:text-base font-bold tracking-wide">
-      {title || 'Cricket Series'}
+      {title || 'INDIAN PREMIER LEAGUE 2026'}
     </h2>
-
-    {subtitle && (
-      <span className="text-xs text-white/70">
-        {subtitle}
-      </span>
-    )}
+    {subtitle && <span className="text-xs text-white/70">{subtitle}</span>}
   </div>
 )
-
-// ─── Sub-tabs (Home / Matches / Scorecard / Table / Squads / Photos) ─────────
-
-
-const getSubTabs = (seriesId) => [
-  {
-    label: 'Home',
-    path: `/cricket/series/${seriesId}`,
-  },
-  {
-    label: 'Matches',
-    path: `/cricket/series/${seriesId}/matches`,
-  },
-  {
-  label: 'Scorecard',
-  path: null,
-  disabled: true,
-  tooltip: 'Open a match first to view scorecard',
-},
-  {
-    label: 'Table',
-    path: `/cricket/series/${seriesId}/points-table`,
-  },
-  {
-    label: 'Teams',
-    path: `/cricket/series/${seriesId}/teams`,
-  },
-]
 
 export const IPLSubTabs = ({ active, seriesId }) => {
   const navigate = useNavigate()
 
-  const SUB_TABS = getSubTabs(seriesId)
+  // seriesId ho toh dynamic paths, warna fallback to hardcoded IPL paths
+  const base = seriesId ? `/cricket/series/${seriesId}` : '/cricket/ipl'
+
+  const SUB_TABS = [
+    { label: 'Home',      path: base },
+    { label: 'Matches',   path: `${base}/matches` },
+    { label: 'Table',     path: `${base}/points-table` },
+    { label: 'Teams',     path: `${base}/teams` },
+  ]
 
   return (
     <div className="bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 border-t-0">
       <div className="flex items-center overflow-x-auto scrollbar-hide">
-        {SUB_TABS.map(({ label, path, disabled, tooltip  }) => (
-        <button
-  key={label}
-  title={disabled ? tooltip : ''}
-  disabled={disabled}
-  onClick={() => path && label !== active && navigate(path)}
-  className={`flex-shrink-0 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-    active === label
-      ? 'border-[#00698c] text-[#00698c]'
-      : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-  } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
->
-  {label}
-</button>
+        {SUB_TABS.map(({ label, path }) => (
+          <button
+            key={label}
+            type="button"
+            onClick={() => path && label !== active && navigate(path)}
+            className={`relative z-30 pointer-events-auto flex-shrink-0 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+              active === label
+                ? 'border-[#00698c] text-[#00698c]'
+                : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+            }`}
+          >
+            {label}
+          </button>
         ))}
       </div>
     </div>
   )
 }
+
 // ─── Page shell (banner + subtabs + content slot) ─────────────────────────────
 export const IPLPageShell = ({ activeTab, children }) => (
   <>
@@ -141,50 +115,13 @@ export const StatusBadge = ({ status }) => {
   )
 }
 
+import { useNavigate } from 'react-router-dom'
 // ─── Match card (used in Matches page) ───────────────────────────────────────
-import { getScorecard, getMatchInfo, getRecentMatches } from '../../../service/ipl.api.js'
+import { getTeamFlag } from '../services/ipl.api.js'
 
 export const MatchCard = ({ match, onClick }) => {
   const t1 = match?.teams?.team1 ?? {}
   const t2 = match?.teams?.team2 ?? {}
-  const getTeamFlag = (teamName) => {
-  if (!teamName) return 'https://via.placeholder.com/32/1a2a3a/FFF?text=?'
-
-  const name = teamName.toLowerCase()
-
-  // IPL Teams mapping
-  if (name.includes('chennai') || name.includes('csk'))
-    return 'https://1000logos.net/wp-content/uploads/2023/03/Chennai-Super-Kings-logo.png'
-
-  if (name.includes('mumbai') || name.includes('mi'))
-    return 'https://1000logos.net/wp-content/uploads/2023/03/Mumbai-Indians-logo.png'
-
-  if (name.includes('bangalore') || name.includes('rcb'))
-    return 'https://1000logos.net/wp-content/uploads/2023/03/Royal-Challengers-Bangalore-logo.png'
-
-  if (name.includes('kolkata') || name.includes('kkr'))
-    return 'https://1000logos.net/wp-content/uploads/2023/03/Kolkata-Knight-Riders-logo.png'
-
-  if (name.includes('delhi') || name.includes('dc'))
-    return 'https://1000logos.net/wp-content/uploads/2023/03/Delhi-Capitals-logo.png'
-
-  if (name.includes('hyderabad') || name.includes('srh'))
-    return 'https://1000logos.net/wp-content/uploads/2023/03/Sunrisers-Hyderabad-logo.png'
-
-  if (name.includes('rajasthan') || name.includes('rr'))
-    return 'https://1000logos.net/wp-content/uploads/2023/03/Rajasthan-Royals-logo.png'
-
-  if (name.includes('punjab') || name.includes('pbks'))
-    return 'https://1000logos.net/wp-content/uploads/2023/03/Punjab-Kings-logo.png'
-
-  if (name.includes('lucknow') || name.includes('lsg'))
-    return 'https://1000logos.net/wp-content/uploads/2023/03/Lucknow-Super-Giants-logo.png'
-
-  if (name.includes('gujarat') || name.includes('gt'))
-    return 'https://1000logos.net/wp-content/uploads/2023/03/Gujarat-Titans-logo.png'
-
-  return 'https://via.placeholder.com/32/1a2a3a/FFF?text=?'
-}
   const dateStr = match?.startTime
     ? new Date(match.startTime).toLocaleString('en-IN', {
         day: 'numeric', month: 'short', year: 'numeric',
@@ -206,7 +143,7 @@ export const MatchCard = ({ match, onClick }) => {
 
       <div className="flex items-center justify-between gap-2">
         {/* Team 1 */}
-        <div className="flex items-center gap-2 flex-1 min-w-0">
+        <div className="flex items-center gap-2 flex-1 min-w-0 ">
           <img
             src={getTeamFlag(t1.name)}
             alt={t1.name}

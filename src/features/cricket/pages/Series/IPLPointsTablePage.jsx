@@ -2,11 +2,11 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import SportsTabs from '@/layouts/SportsTabs'
-import CricketTabs from '../components/CricketTabs'
+import CricketTabs from '../../components/CricketTabs'
 import BlogsSection from '@/shared/components/BlogsSection'
 import SeoManager from '@/core/seo/SeoManager'
-import {IPLBanner, IPLSubTabs, SkeletonLine, EmptyState, ErrorState} from '../components/iplshared'
-import { getPointsTable, getTeamFlag } from '../../../service/ipl.api'
+import {IPLBanner, IPLSubTabs, SkeletonLine, EmptyState, ErrorState} from '../../components/iplshared'
+import { getPointsTable, getTeamFlag } from '../../../../service/ipl.api'
 
 const FormBadge = ({ result }) => (
   <span className={`inline-flex items-center justify-center w-5 h-5 rounded text-[10px] font-black ${
@@ -81,19 +81,32 @@ const IPLPointsTablePage = () => {
 
  const { seriesId } = useParams()
 
-  const load = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const data = await getPointsTable(seriesId)  // returns response.data.data (the inner object)
-      setStandings(extractStandings(data))
-      setUpdatedAt(data?.updatedAt || data?.lastUpdated || null)
-    } catch (e) {
-      setError(e.message)
-    } finally {
-      setLoading(false)
+const load = async () => {
+  setLoading(true)
+  setError(null)
+  try {
+    const data = await getPointsTable(seriesId)
+    const rows = extractStandings(data)
+    setStandings(rows)
+    setUpdatedAt(data?.updatedAt || data?.lastUpdated || null)
+  } catch (e) {
+    // 404 ya empty response = data nahi hai, error nahi
+    const msg = e?.message || ''
+    const isNotFound =
+      e?.response?.status === 404 ||
+      msg.includes('404') ||
+      msg.includes('not found') ||
+      msg.includes('No points')
+    
+    if (isNotFound) {
+      setStandings([])  // empty dikhao, error nahi
+    } else {
+      setError(e.message)  // real error tabhi
     }
+  } finally {
+    setLoading(false)
   }
+}
 
   useEffect(() => { load() }, [seriesId])
 
@@ -106,7 +119,10 @@ const IPLPointsTablePage = () => {
               ) : error ? (
                 <ErrorState onRetry={load} />
               ) : standings.length === 0 ? (
-                <EmptyState message="Points table not available yet — season may not have started" icon="📊" />
+                <EmptyState 
+  message="Points table is not available for this match" 
+  icon="📊" 
+/>
               ) : (
                 <>
                   {updatedAt && (

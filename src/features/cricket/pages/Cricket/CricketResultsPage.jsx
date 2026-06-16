@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SportsTabs from '@/layouts/SportsTabs'
-import CricketTabs from '../components/CricketTabs'
+import CricketTabs from '../../components/CricketTabs'
 import SectionHeader from '@/shared/components/SectionHeader'
 import BlogsSection from '@/shared/components/BlogsSection'
 import SeoManager from '@/core/seo/SeoManager'
-import { getAllMatchFeeds, getTeamFlag } from '../../../service/ipl.api'
+import { getAllMatchFeeds, getTeamFlag } from '../../../../service/ipl.api'
 
 // ── Search Icon ───────────────────────────────────────────────────────────────
 const SearchIcon = () => (
@@ -27,7 +27,7 @@ const ResultCard = ({ match, onClick }) => {
   return (
     <div
       onClick={onClick}
-      className="bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
+      className="bg-white z-40 relative dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 cursor-pointer"
     >
       {/* Status bar */}
       <div className="bg-gradient-to-r from-[#00698c] to-[#0088b0] text-white px-3 sm:px-4 py-2 sm:py-2.5 flex items-center justify-between flex-wrap gap-2">

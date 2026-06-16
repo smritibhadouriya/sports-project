@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getAllTeams, getSeriesTeams } from '../../../service/ipl.api'
+import { getAllTeams, getSeriesTeams } from '../../../../service/ipl.api'
 
 function classifyTeam(team) {
   const name = team.name?.toLowerCase() || ''
@@ -40,10 +40,10 @@ const FILTER_TABS = [
   { id: 'international', label: 'International' },
   { id: 'ipl',         label: 'IPL Franchises' },
   { id: 'women-intl',  label: 'Women — Intl' },
-  { id: 'women-other', label: 'Women — Others' },
-  { id: 'a-teams',     label: 'A Teams' },
-  { id: 'county',      label: 'County' },
-  { id: 'domestic',    label: 'Domestic' },
+  // { id: 'women-other', label: 'Women — Others' },
+  // { id: 'a-teams',     label: 'A Teams' },
+  // { id: 'county',      label: 'County' },
+  // { id: 'domestic',    label: 'Domestic' },
 ]
 
 // ── Team Avatar — flag (rectangular) > logo > initials fallback ───────────────
@@ -93,7 +93,7 @@ const FilterTab = ({ label, active, onClick }) => (
 const TeamCard = ({ team, onClick }) => (
   <button
     onClick={onClick}
-    className="flex items-center gap-3 px-4 py-3.5 w-full text-left
+    className="flex items-center gap-3 px-4 py-3.5 w-full text-left relative z-10 
                bg-white dark:bg-[#1c2128]
                border-b border-r border-gray-100 dark:border-gray-800
                hover:bg-gray-50 dark:hover:bg-[#22292f]
@@ -157,14 +157,18 @@ const CricketTeamsPage = () => {
     ),
   [categorized])
 
-  const filtered = categorized.filter(t => {
-    const matchesFilter = filter === 'all' || t._cat === filter
-    const q = search.trim().toLowerCase()
-    const matchesSearch = !q ||
-      t.name?.toLowerCase().includes(q) ||
-      t.shortName?.toLowerCase().includes(q)
-    return matchesFilter && matchesSearch
-  }).sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+const filtered = categorized.filter(t => {
+  const HIDDEN_IN_ALL = new Set(['women-other', 'county','domestic'])
+  const matchesFilter = 
+    filter === 'all' 
+      ? !HIDDEN_IN_ALL.has(t._cat)
+      : t._cat === filter
+  const q = search.trim().toLowerCase()
+  const matchesSearch = !q ||
+    t.name?.toLowerCase().includes(q) ||
+    t.shortName?.toLowerCase().includes(q)
+  return matchesFilter && matchesSearch
+})
 
   const handleTeamClick = (team) => {
     if (seriesId) {
@@ -177,7 +181,7 @@ const CricketTeamsPage = () => {
   return (
     <div>
       {/* Search */}
-      <div className="relative mb-4">
+      <div className="relative mb-4 z-40 ">
         <svg
           className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none"
           fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -206,7 +210,7 @@ const CricketTeamsPage = () => {
 
       {/* Filter tabs — global page only */}
       {!seriesId && (
-        <div className="flex gap-2 mb-5 flex-wrap">
+        <div className="flex gap-2 mb-5 flex-wrap z-40 relative">
           {FILTER_TABS.map(tab => (
             <FilterTab
               key={tab.id}

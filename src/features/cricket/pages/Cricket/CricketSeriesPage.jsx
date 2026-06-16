@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import SectionHeader from '@/shared/components/SectionHeader'
-import { getSeries } from '../../../service/ipl.api'
+import { getSeries } from '../../../../service/ipl.api'
 
 // ── Date Formatter ────────────────────────────────────────────────────────────
 const formatDateRange = (startMs, endMs) => {
@@ -17,8 +17,25 @@ const formatDateRange = (startMs, endMs) => {
 }
 
 // ── Priority Scoring ──────────────────────────────────────────────────────────
+// function getSeriesPriority(name = '') {
+//   const lower = name.toLowerCase()
+
+//   if (/world cup|champions trophy|asia cup|wtc|world test championship/i.test(lower)) return 100
+//   if (/\bipl\b|indian premier league|big bash|\bbbl\b|pakistan super league|\bpsl\b|sa20|the hundred|\bmlc\b|\bcpl\b|\bilt20\b|\blpl\b|\bbpl\b/i.test(lower)) return 90
+//   if (lower.includes('india') && /tour of|vs/i.test(lower)) return 85
+//   if (/australia|england|pakistan|south africa|new zealand|west indies|sri lanka|bangladesh|afghanistan/i.test(lower) && /tour of/i.test(lower)) return 80
+//   if (/women/i.test(lower) && /tour of|world cup/i.test(lower)) return 70
+//   if (/tour of/i.test(lower)) return 50
+//   if (/premier league|t20 league|cup|trophy/i.test(lower)) return 20
+
+//   return 10
+// }
+
 function getSeriesPriority(name = '') {
   const lower = name.toLowerCase()
+
+  // Block: qualifier/league/super league — low priority
+  if (/world cup league|world cup qualifier|world cup super league|challenge league/i.test(lower)) return 15
 
   if (/world cup|champions trophy|asia cup|wtc|world test championship/i.test(lower)) return 100
   if (/\bipl\b|indian premier league|big bash|\bbbl\b|pakistan super league|\bpsl\b|sa20|the hundred|\bmlc\b|\bcpl\b|\bilt20\b|\blpl\b|\bbpl\b/i.test(lower)) return 90
@@ -83,6 +100,7 @@ const SeriesRow = ({ series, isOngoing, onClick }) => (
   <div
     onClick={onClick}
     className={`
+      relative z-10
       bg-white dark:bg-[#1c2128] rounded-lg px-4 py-3
       flex items-center justify-between
       hover:shadow-md transition-all cursor-pointer group
@@ -124,7 +142,7 @@ const SkeletonRow = () => (
 )
 
 const SectionLabel = ({ title, badge }) => (
-  <div className="flex items-center gap-2 mb-2 px-1 relative z-30 pointer-events-auto ">
+  <div className="flex items-center gap-2 mb-2 px-1">
     <h4 className="text-xs font-black tracking-widest uppercase text-[#00698c]">
       {title}
     </h4>
@@ -135,13 +153,13 @@ const SectionLabel = ({ title, badge }) => (
 )
 
 const TabBar = ({ active, onChange }) => (
-  <div className="flex gap-1 bg-gray-100 dark:bg-gray-800/50 rounded-lg p-1 mb-5 overflow-x-auto">
+  <div className="flex gap-1 bg-gray-100 dark:bg-gray-800/50 rounded-lg p-1 mb-5 z-40 relative overflow-x-auto">
     {TABS.map(tab => (
       <button
         key={tab.key}
         onClick={() => onChange(tab.key)}
         className={`
-          flex-shrink-0 flex-1 py-1.5 text-xs font-bold rounded-md transition-all
+          flex-shrink-0 flex-1 py-1.5 text-xs font-bold rounded-md transition-all 
           ${active === tab.key
             ? 'bg-white dark:bg-[#1c2128] text-[#00698c] shadow-sm'
             : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}
@@ -181,16 +199,16 @@ const CricketSeriesPage = () => {
 
         const now = Date.now()
 
-        const flat = raw
-          .flatMap(group => group.series || [])
-          .filter(s => Number(s.endDt) >= now)
-          .map(s => ({
-            ...s,
-            _type:     classifySeries(s.name),
-            _priority: getSeriesPriority(s.name),
-            _ongoing:  Number(s.startDt) <= now && Number(s.endDt) >= now,
-          }))
-
+      const flat = raw
+  .flatMap(group => group.series || [])
+  .filter(s => Number(s.endDt) >= now)
+  .map(s => ({
+    ...s,
+    id:        s.id || s.seriesId || s.series_id || '',  // ← add karo
+    _type:     classifySeries(s.name),
+    _priority: getSeriesPriority(s.name),
+    _ongoing:  Number(s.startDt) <= now && Number(s.endDt) >= now,
+  }))
         // Sort: ongoing first, then by priority desc, then startDt asc
         flat.sort((a, b) => {
           if (a._ongoing && !b._ongoing) return -1
@@ -238,8 +256,10 @@ const CricketSeriesPage = () => {
   }, [filtered])
 
   const handleSeriesClick = (series) => {
+  console.log('[Series click]', series.id, series.name)
+  if (!series.id) return
   navigate(`/cricket/series/${series.id}`, {
-    state: { seriesName: series.name }  // ← yeh add karo
+    state: { seriesName: series.name }
   })
 }
 

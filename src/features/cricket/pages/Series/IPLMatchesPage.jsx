@@ -1,7 +1,7 @@
 // pages/SeriesMatchesPage.jsx
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getSeriesMatches, getTeamFlag, getTeamLogo } from '../../../service/ipl.api'
+import { getSeriesMatches, getTeamFlag, getTeamLogo } from '../../../../service/ipl.api'
 
 const TABS = ['All', 'Live', 'Upcoming', 'Recent']
 
@@ -36,7 +36,7 @@ const MatchCard = ({ match, seriesId }) => {
 
   return (
     <div
-      className={`bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 mb-3 sm:mb-4 ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
+      className={`bg-white relative z-40 dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 mb-3 sm:mb-4 ${isClickable ? 'cursor-pointer' : 'cursor-default'}`}
       onClick={handleClick}
     >
       {/* Status bar */}
@@ -255,7 +255,7 @@ const filtered =
  
 
       {/* Filter tabs */}
-      <div className="flex gap-1 mb-4 border-b border-gray-100 dark:border-gray-700 pb-3 overflow-x-auto scrollbar-hide">
+      <div className="flex gap-1 mb-4 border-b z-40 relative border-gray-100 dark:border-gray-700 pb-3 overflow-x-auto scrollbar-hide">
         {TABS.map((tab) => (
           <button
             key={tab}

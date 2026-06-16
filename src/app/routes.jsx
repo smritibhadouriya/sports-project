@@ -5,9 +5,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import MainLayout from '@/layouts/MainLayout'
 import ScrollToTop from '@/components/ScrollToTop'
 import CricketLayout from '@/features/cricket/components/Cricketlayout'
-import CricketTeamsPage from '../features/cricket/pages/CricketTeamPage'
-import CricketTeamDetailPage from '../features/cricket/pages/CricketTeamDetailPage'
-import ComingSoon from '../design-system/Comingsoon'
+import ComingSoon from './Comingsoon'
 
 // Common Pages
 const HomePage       = lazy(() => import('@/features/home/HomePage'))
@@ -26,32 +24,29 @@ const NewsDetailPage = lazy(() => import('@/features/news/pages/NewsDetailPage')
 const TagListPage    = lazy(() => import('@/features/news/pages/TagListPage'))
 
 // Cricket
-const CricketHomePage     = lazy(() => import('@/features/cricket/pages/CricketHomePage'))
-const CricketScoresPage   = lazy(() => import('@/features/cricket/pages/CricketScoresPage'))
-const CricketSeriesPage   = lazy(() => import('@/features/cricket/pages/CricketSeriesPage'))
-const CricketFixturesPage = lazy(() => import('@/features/cricket/pages/CricketFixturesPage'))
-const CricketResultsPage  = lazy(() => import('@/features/cricket/pages/CricketResultsPage'))
-const CricketNewsPage = lazy(() => import('@/features/cricket/pages/CricketNewsPage'))
-const PlayerDetailPage    = lazy(() => import('@/features/cricket/pages/PlayerDetailPage'))
-const TeamListPage        = lazy(() => import('@/features/cricket/pages/TeamListPage'))
+const CricketHomePage     = lazy(() => import('@/features/cricket/pages/Cricket/CricketHomePage'))
+const CricketScoresPage   = lazy(() => import('@/features/cricket/pages/Cricket/CricketScoresPage'))
+const CricketSeriesPage   = lazy(() => import('@/features/cricket/pages/Cricket/CricketSeriesPage'))
+const CricketFixturesPage = lazy(() => import('@//features/cricket/pages/Cricket/CricketFixturesPage'))
+const CricketResultsPage  = lazy(() => import('@/features/cricket/pages/Cricket/CricketResultsPage'))
+const CricketNewsPage = lazy(() => import('@/features/cricket/pages/Cricket/CricketNewsPage'))
+const CricketTeamDetailPage  = lazy(() => import('@/features/cricket/pages/Cricket/CricketTeamDetailPage'))
+const CricketTeamsPage = lazy(() => import('@//features/cricket/pages/Cricket/CricketTeamPage'))
+const PlayerDetailPage    = lazy(() => import('@/features/cricket/pages/Cricket/PlayerDetailPage'))
+const TeamListPage        = lazy(() => import('@//features/cricket/pages/Cricket/TeamListPage'))
 
-// IPL
+//Series
 const IPLLayout           = lazy(() => import('@/features/cricket/components/IPLLayout'))
-const IPLHomePage         = lazy(() => import('@/features/cricket/pages/IPLHomePage'))
-const IPLMatchesPage      = lazy(() => import('@/features/cricket/pages/IPLMatchesPage'))
-const IPLScorecardPage    = lazy(() => import('@/features/cricket/pages/Iplscorecardpage'))
-const IPLPointsTablePage  = lazy(() => import('@/features/cricket/pages/IPLPointsTablePage'))
+const IPLHomePage         = lazy(() => import('@/features/cricket/pages/Series/IPLHomePage'))
+const IPLMatchesPage      = lazy(() => import('@/features/cricket/pages/Series/IPLMatchesPage'))
+const IPLScorecardPage    = lazy(() => import('@/features/cricket/pages/Series/Iplscorecardpage'))
+const IPLPointsTablePage  = lazy(() => import('@/features/cricket/pages/Series/IPLPointsTablePage'))
 
-const comingSoon          = lazy(() => import('@/design-system/Comingsoon'))
 // Media
-const Allphoto    = lazy(() => import('@/features/news/pages/Allphoto'))
-const GalleryView = lazy(() =>
-  import('@/features/news/pages/Allphoto').then(m => ({ default: m.GalleryView }))
-)
-const AllVideo    = lazy(() => import('@/features/news/pages/Allvedio'))
-const VideoDetail = lazy(() =>
-  import('@/features/news/pages/Allvedio').then(m => ({ default: m.VideoDetail }))
-)
+const Allphoto    = lazy(() => import('@/features/media/pages/Allphoto'))
+const GalleryView = lazy(() =>import('@/features/media/pages/Allphoto').then(m => ({ default: m.GalleryView })))
+const AllVideo    = lazy(() => import('@/features/media/pages/Allvedio'))
+const VideoDetail = lazy(() =>import('@/features/media/pages/Allvedio').then(m => ({ default: m.VideoDetail })))
 
 export const router = createBrowserRouter([
   {
@@ -158,4 +153,3 @@ export const router = createBrowserRouter([
     ],
   },
 ])
-

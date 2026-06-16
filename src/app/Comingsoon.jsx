@@ -1,15 +1,6 @@
 import { memo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-/**
- * ComingSoon
- * Generic placeholder page for sports/games that aren't added yet.
- * Matches the existing site UI (colors, cards, rounded corners, dark mode).
- *
- * Usage:
- *  <Route path="/kabaddi" element={<ComingSoon sport="Kabaddi" emoji="🤼" />} />
- *  <Route path="/hockey" element={<ComingSoon sport="Hockey" emoji="🏑" />} />
- */
 const ComingSoon = memo(({ sport = 'This Sport', emoji = '🏆' }) => {
   const navigate = useNavigate()
 

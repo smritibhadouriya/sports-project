@@ -74,7 +74,7 @@ title={seriesName || fallbackSeriesName || `Series ${seriesId}`}
         ref={outletRef}
         className="bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 border-t-0 rounded-b-lg p-3 sm:p-4"
       >
-        <Outlet />
+       <Outlet context={{ seriesId }} />
       </div>
 
       <div className="hidden lg:block lg:w-[20%]" />

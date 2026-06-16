@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { getSeriesTeams, getTeamPlayersById } from '../../../service/ipl.api'
+import { getSeriesTeams, getTeamPlayersById } from '../../../../service/ipl.api'
 import { useParams } from 'react-router-dom'
 
 const getSlug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
@@ -21,7 +21,7 @@ const RoleBadge = ({ role }) => {
 const PlayerRow = ({ player, onClick }) => (
   <button
     onClick={() => onClick(player)}
-    className="w-full flex items-center gap-3 p-3 sm:p-4 bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md hover:border-[#00698c]/40 transition-all duration-200 text-left group"
+    className="w-full flex items-center gap-3 p-3 z-40 relative sm:p-4 bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md hover:border-[#00698c]/40 transition-all duration-200 text-left group"
   >
     <div className="w-11 h-11 rounded-full overflow-hidden flex-shrink-0 bg-gradient-to-br from-yellow-100 to-purple-200 dark:from-yellow-900/30 dark:to-purple-900/30 border border-gray-100 dark:border-gray-700">
       {player.imageUrl ? (
@@ -179,7 +179,7 @@ useEffect(() => {
           <div className="mt-1 bg-white dark:bg-[#1c2128] border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden z-20">
             {teams.map(team => (
               <button key={team.teamId} onClick={() => handleTeamChange(team)}
-                className={`w-full text-left px-4 py-3 text-sm border-b border-gray-100 dark:border-gray-700 last:border-0 flex items-center justify-between transition-colors ${
+                className={`w-full text-left px-4 z-40 relative py-3 text-sm border-b border-gray-100 dark:border-gray-700 last:border-0 flex items-center justify-between transition-colors ${
                   selectedTeam?.teamId === team.teamId
                     ? 'bg-[#00698c]/5 font-semibold text-gray-900 dark:text-white'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
@@ -209,7 +209,7 @@ useEffect(() => {
           </div>
           {teams.map(team => (
             <button key={team.teamId} onClick={() => handleTeamChange(team)}
-              className={`w-full text-left px-3 py-2.5 text-xs border-b border-gray-100 dark:border-gray-700 last:border-0 flex items-center gap-2 transition-colors ${
+              className={`w-full text-left px-3 py-2.5  z-40 relative text-xs border-b border-gray-100 dark:border-gray-700 last:border-0 flex items-center gap-2 transition-colors ${
                 selectedTeam?.teamId === team.teamId
                   ? 'bg-[#00698c]/5 dark:bg-[#00698c]/10 font-semibold text-gray-900 dark:text-white'
                   : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 bg-white dark:bg-[#1c2128]'

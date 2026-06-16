@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import SportsTabs from '@/layouts/SportsTabs'
-import CricketTabs from '../components/CricketTabs'
+import CricketTabs from '../../components/CricketTabs'
 import BlogsSection from '@/shared/components/BlogsSection'
 import SeoManager from '@/core/seo/SeoManager'
-import { IPLBanner, IPLSubTabs } from '../components/iplshared'
 import {
   getAllTeams,
   getTeamPlayersById,
   getIPLPlayerDetail,
   mergePlayerDetail,
-} from '../../../service/ipl.api'
+} from '../../../../service/ipl.api'
 
 const getSlug = (name) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
@@ -91,6 +90,8 @@ const PlayerHeroCard = ({ player, currentTeam, teamName }) => {
     ['Bowling Style', bowlingStyle],
     ...(player.nationality ? [['Nationality', player.nationality]] : []),
   ]
+
+  const [expanded, setExpanded] = useState(false)
 
   return (
     <div className="rounded-xl overflow-hidden shadow-lg mb-6 border border-gray-200 dark:border-gray-700">
@@ -266,22 +267,32 @@ const PlayerHeroCard = ({ player, currentTeam, teamName }) => {
         )}
 
         {/* About / Bio — bracket wali cheeze removed */}
-        <div className="px-5 pt-5 pb-6">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">About</h2>
-          {player.bio ? (
-            <div
-              className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed
-                         prose prose-sm dark:prose-invert max-w-none"
-              dangerouslySetInnerHTML={{
-                __html: player.bio.replace(/<br\s*\/?>/gi, '<br/>')
-              }}
-            />
-          ) : (
-            <p className="text-sm text-gray-500 dark:text-gray-400 py-4 text-center">
-              Career statistics and summary will be available soon.
-            </p>
-          )}
-        </div>
+<div className="px-5 pt-5 pb-6">
+  <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">About</h2>
+  {player.bio ? (
+    <>
+      <div
+        className={`text-sm text-gray-600 dark:text-gray-300 leading-relaxed
+                   prose prose-sm dark:prose-invert max-w-none overflow-hidden
+                   transition-all duration-300`}
+        style={{ maxHeight: expanded ? '2000px' : '96px' }}  // 96px ≈ 4 lines
+        dangerouslySetInnerHTML={{
+          __html: player.bio.replace(/<br\s*\/?>/gi, '<br/>')
+        }}
+      />
+      <button
+        onClick={() => setExpanded(prev => !prev)}
+        className="mt-2 text-sm font-semibold text-[#00698c] dark:text-[#4dd0ff] hover:underline z-20 relative"
+      >
+        {expanded ? 'Read less ↑' : 'Read more ↓'}
+      </button>
+    </>
+  ) : (
+    <p className="text-sm text-gray-500 dark:text-gray-400 py-4 text-center">
+      Career statistics and summary will be available soon.
+    </p>
+  )}
+</div>
       </div>
     </div>
   )

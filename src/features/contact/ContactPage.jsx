@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import SeoManager from '@/core/seo/SeoManager'
 import { seoConfig } from '@/config/seo.config'
-import Button from '@/design-system/Button'
 
 const TwitterIcon = () => (
   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -135,9 +134,10 @@ const ContactPage = () => {
                   />
                 </div>
 
-                <Button type="submit" variant="primary" size="lg" fullWidth>
+                <button type="submit"  className='bg-[#00698c] hover:bg-[#005470] text-white font-semibold transition-colors duration-200 px-6 py-2.5 text-base rounded-lg' fullWidth>
                   Send Message
-                </Button>
+                </button>
+                
               </form>
             </div>
           </div>
