@@ -61,7 +61,7 @@ export const shortTeamName = (team = '') => {
   const abbr = TEAM_ABBR_MAP[baseName]
 
   if (!abbr) {
-    if (NODE_ENV !== 'production') {
+    if (import.meta.env.DEV) {
       console.warn(`[shortTeamName] Unrecognized team: "${raw}" (normalized: "${baseName}")`)
     }
     return null

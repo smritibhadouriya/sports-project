@@ -16,7 +16,7 @@ const BlogCard = memo(({ post, compact = false }) => {
         <img
           src={post.image}
           alt={post.title}
-          className={`w-full object-cover-cotain ${compact ? 'h-44' : 'h-52'}`}
+          className={`w-full object-fit ${compact ? 'h-44' : 'h-52'}`}
           loading="lazy"
         />
         <span className="absolute top-2 left-2 bg-gray-900/80 text-white text-[10px] font-bold px-2 py-0.5 rounded">

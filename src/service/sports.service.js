@@ -109,6 +109,7 @@ const mapItem = (item, fallbackCategory) => {
     source:        parsedSource.label,
     sourceUrl:     parsedSource.url ?? item.url,
     publishedAt:   item.publishedAt,
+    updated_at:    item.updated_at,
     url:           item.url,
     final_content: item.final_content ?? '',
     tags:          normalizeTags(item.tags),

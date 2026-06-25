@@ -56,7 +56,7 @@ const NewsDetailPage = () => {
         const apiNews = res.success
           ? res.data.map((item) => ({
               ...item,
-              time: new Date(item.publishedAt).toLocaleDateString('en-IN', {
+              time: new Date(item.updated_at).toLocaleDateString('en-IN', {
                 day: '2-digit', month: 'short', year: 'numeric',
               }),
               basePath: item.basePath ?? '/news',
@@ -140,8 +140,8 @@ const NewsDetailPage = () => {
       'headline': article.title,
       'description': metaDescription,
       'image': imageUrl,
-      'datePublished': article.publishedAt || new Date().toISOString(),
-      'dateModified': article.updatedAt || article.publishedAt || new Date().toISOString(),
+      'datePublished': article.updated_at || new Date().toISOString(),
+      'dateModified': article.updatedAt || article.updated_at || new Date().toISOString(),
       'author': {
         '@type': 'Organization',
         'name': article.source || 'Sports News Platform',
@@ -246,7 +246,7 @@ const NewsDetailPage = () => {
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:image" content={article.image} />
         <meta property="og:site_name" content="Sports News Platform" />
-        <meta property="article:published_time" content={article.publishedAt} />
+        <meta property="article:published_time" content={article.updated_at} />
         <meta property="article:section" content={article.category || article.subCategory} />
         {tags.map((tag, index) => (
           <meta key={index} property="article:tag" content={tag} />
@@ -299,7 +299,7 @@ const NewsDetailPage = () => {
                 {article.subCategory || article.category}
               </span>
               <span className="ml-auto text-xs text-gray-400 dark:text-gray-500">
-                <time dateTime={article.publishedAt}>{article.time}</time>
+                <time dateTime={article.updated_at}>{article.time}</time>
               </span>
             </div>
 
@@ -434,7 +434,7 @@ const NewsDetailPage = () => {
                         <div className="flex items-center gap-1 mt-0.5">
                           <span className="text-[10px] font-medium text-[#00698c]">{item.source}</span>
                           <span className="text-gray-300 dark:text-gray-600">·</span>
-                          <time className="text-[10px] text-gray-400" dateTime={item.publishedAt}>{item.time}</time>
+                          <time className="text-[10px] text-gray-400" dateTime={item.updated_at}>{item.time}</time>
                         </div>
                       </div>
                     </Link>

@@ -25,7 +25,7 @@ const resolveImage = (banner) => {
 
   return ''
 }
-const BlogsRow = memo(({ limit = 4, showViewAll = true }) => {
+const BlogsRow = memo(({ limit = 3, showViewAll = true }) => {
   const [blogs, setBlogs] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -52,8 +52,14 @@ const posts = blogs.slice(0, limit).map((post) => ({
   title: post.title,
   excerpt: post.description,
   categoryLabel: post.category,
-  image: resolveImage(post.bannerImage), 
-  date: new Date(post.createdAt).toLocaleDateString(),
+  image: resolveImage(post.bannerImage),
+  date: (post.updatedAt || post.createdAt)
+    ? new Intl.DateTimeFormat('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      }).format(new Date(post.updatedAt || post.createdAt))
+    : '',
   author: post.author?.name || "Unknown",
 }))
 
@@ -96,7 +102,7 @@ const posts = blogs.slice(0, limit).map((post) => ({
 
       {/* ── Blog Cards ── */}
       {!loading && posts.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {posts.map((post) => (
             <BlogCard key={post.id} post={post} compact />
           ))}

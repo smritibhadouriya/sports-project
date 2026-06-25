@@ -586,7 +586,7 @@ useEffect(() => {
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigate('/cricket/ipl/matches');
+                        navigate('/cricket/fixtures');
                       }}
                       className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#00698c] text-white text-sm font-semibold rounded-lg hover:bg-[#005a7a] transition-colors"
                     >

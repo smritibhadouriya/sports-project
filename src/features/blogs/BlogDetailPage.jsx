@@ -233,7 +233,6 @@ const BLOG_CONTENT_STYLES = `
   .blog-content p { margin: 1rem 0; line-height: 1.8; color: #334155; }
   .blog-content a {
   color: #2563EB !important; /* Tailwind blue-600 */
-  text-decoration: underline !important;
   font-weight: 500;
   word-break: break-word;
   transition: color 0.2s ease;
@@ -241,7 +240,6 @@ const BLOG_CONTENT_STYLES = `
 
 .blog-content a:hover {
   color: #1D4ED8 !important; /* blue-700 */
-  text-decoration-thickness: 2px;
 }
   .blog-content h1, .blog-content h2, .blog-content h3 { color: #0f172a; margin-top: 2rem; font-weight: 800; }
   .blog-content img { max-width: 100%; height: auto; border-radius: 8px; margin: 1.5rem auto; display: block; }
@@ -640,7 +638,7 @@ const BlogDetailPage = () => {
             {bannerUrl && (
               <div className="w-full mb-6">
                 <img src={bannerUrl} alt={blog.title}
-                  className="w-full h-56 sm:h-72 md:h-80 object-cover rounded-2xl shadow-sm"
+                  className="w-full h-56 sm:h-72 md:h-80 object-fit rounded-2xl shadow-sm"
                   loading="lazy"
                   onError={(e) => { e.target.style.display = 'none'; }} />
               </div>

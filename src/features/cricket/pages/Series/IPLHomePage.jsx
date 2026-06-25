@@ -248,9 +248,9 @@ const GridNewsCard = ({ article, index, style }) => {
             <span className="text-3xl opacity-15">🏏</span>
           </div>
         )}
-        {article.publishedAt && (
+        {article.updated_at && (
           <time className="absolute top-2 right-2 text-[9px] text-white/90 bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">
-            {formatTime(article.publishedAt)}
+            {formatTime(article.updated_at)}
           </time>
         )}
       </div>
@@ -271,7 +271,7 @@ const GridNewsCard = ({ article, index, style }) => {
 // ── News Section ───────────────────────────────────────────────────────────────
 const NewsSection = ({ news, loading, error }) => {
   const [showAll, setShowAll] = useState(false)
-  const INITIAL = 6
+  const INITIAL = 3
   const visible = showAll ? news : news.slice(0, INITIAL)
 
   if (loading) return (

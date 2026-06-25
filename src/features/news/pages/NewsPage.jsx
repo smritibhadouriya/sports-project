@@ -38,7 +38,7 @@ const NewsCard = memo(({ item }) => (
       </p>
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-semibold text-[#00698c] truncate">{item.source}</span>
-        <time className="text-[10px] text-gray-400 dark:text-gray-500 flex-shrink-0 ml-2" dateTime={item.publishedAt}>
+        <time className="text-[10px] text-gray-400 dark:text-gray-500 flex-shrink-0 ml-2" dateTime={item.updated_at}>
           {item.time}
         </time>
       </div>
@@ -103,7 +103,7 @@ const NewsPage = () => {
       if (res.success) {
         const formatted = res.data.map((item) => ({
           ...item,
-          time: new Date(item.publishedAt).toLocaleDateString('en-IN', {
+          time: new Date(item.updated_at).toLocaleDateString('en-IN', {
             day: '2-digit', month: 'short', year: 'numeric',
           }),
           // Fix badge: Pass activeTab to force correct category

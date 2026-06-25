@@ -77,7 +77,7 @@ const NewsCard = memo(({ item, basePath }) => (
         <div className="flex items-center gap-1.5">
           <span className="text-[10px] font-semibold text-[#00698c]">{item.source}</span>
         </div>
-        <time className="text-[10px] text-gray-400 dark:text-gray-500" dateTime={item.publishedAt}>
+        <time className="text-[10px] text-gray-400 dark:text-gray-500" dateTime={item.updated_at}>
           {item.time}
         </time>
       </div>
@@ -110,7 +110,7 @@ const HeadlineCard = memo(({ item }) => (
       <div className="flex items-center gap-1.5 flex-wrap">
         <span className="text-[10px] font-medium text-[#00698c]">{item.source}</span>
         <span className="text-gray-300 dark:text-gray-600">·</span>
-        <time className="text-[10px] text-gray-400 dark:text-gray-500" dateTime={item.publishedAt}>
+        <time className="text-[10px] text-gray-400 dark:text-gray-500" dateTime={item.updated_at}>
           {item.time}
         </time>
       </div>
@@ -151,13 +151,20 @@ const NewsListPage = () => {
         const res = await getLatestNews(config.apiCategory, { limit: 1000, offset: 0 })
 
         if (res.success) {
-          const formatted = res.data.map((item) => ({
-            ...item,
-            time: new Date(item.publishedAt).toLocaleDateString('en-IN', {
-              day: '2-digit', month: 'short', year: 'numeric',
-            }),
-            category: config.label,
-          }))
+          const formatted = res.data.map((item) => {
+            const rawDate = item.updated_at || item.publishedAt
+            const parsed = rawDate ? new Date(rawDate) : null
+            const time = parsed && !isNaN(parsed)
+              ? parsed.toLocaleDateString('en-IN', {
+                  day: '2-digit', month: 'short', year: 'numeric',
+                })
+              : ''
+            return {
+              ...item,
+              time,
+              category: config.label,
+            }
+          })
           setNews(formatted)
         }
       } catch (err) {

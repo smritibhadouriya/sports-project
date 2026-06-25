@@ -135,7 +135,7 @@ const TagListPage = () => {
           setAllNews(
             res.data.map((item) => ({
               ...item,
-              time: new Date(item.publishedAt).toLocaleDateString('en-IN', {
+              time: new Date(item.updated_at).toLocaleDateString('en-IN', {
                 day: '2-digit', month: 'short', year: 'numeric',
               }),
               basePath: item.basePath ?? '/news',
@@ -385,7 +385,7 @@ const TagListPage = () => {
                         <div className="flex items-center gap-1 mt-0.5">
                           <span className="text-[10px] font-medium text-[#00698c]">{item.source}</span>
                           <span className="text-gray-300 dark:text-gray-600">·</span>
-                          <time className="text-[10px] text-gray-400" dateTime={item.publishedAt}>{item.time}</time>
+                          <time className="text-[10px] text-gray-400" dateTime={item.updated_at}>{item.time}</time>
                         </div>
                       </div>
                     </Link>

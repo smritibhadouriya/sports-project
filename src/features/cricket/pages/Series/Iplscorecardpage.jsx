@@ -232,7 +232,7 @@ const LiveBadge = ({ isLive, lastUpdated }) => {
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 const IPLScorecardPage = () => {
-  const { matchId } = useParams()
+  const { seriesId, matchId } = useParams()
   const navigate    = useNavigate()
 
   const [scorecard,     setScorecard]     = useState(null)
