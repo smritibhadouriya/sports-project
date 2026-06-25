@@ -75,6 +75,8 @@ function extractGroups(data) {
         standings: Array.isArray(g.standings) ? g.standings : [],
       }))
       .filter(g => g.standings.length > 0)
+      // API groups out-of-order de sakta hai (Group B pehle) — naam se sort (Group A upar)
+      .sort((a, b) => (a.groupName || '').localeCompare(b.groupName || ''))
   }
 
   // Case 2: backend already parsed but flat (single group)
@@ -91,6 +93,8 @@ function extractGroups(data) {
         standings: (g?.pointsTableInfo || []).map(parseTeamRow),
       }))
       .filter(g => g.standings.length > 0)
+      // API groups out-of-order de sakta hai (Group B pehle) — naam se sort (Group A upar)
+      .sort((a, b) => (a.groupName || '').localeCompare(b.groupName || ''))
   }
 
   return []
